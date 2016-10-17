@@ -3,7 +3,7 @@
 
 #include <avr/io.h>
 
-void SPI_Init(SPI_t *spi);
+void SPI_Init(SPI_t *spi, PORT_t *csPort, uint8_t cs);
 
 uint8_t SPI_ReadByte();
 void SPI_ReadBytes(uint8_t *buffer, uint8_t length);
