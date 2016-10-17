@@ -17,15 +17,11 @@ void SPI_Init(SPI_t *spi, PORT_t *csPort, uint8_t cs)
 	CSPort->DIRSET = CS;
 }
 
-uint8_t SPI_ReadByte()
-{	// Send CS low
-	CSPort->OUTCLR = CS;
-	// Initiate transfer
+uint8_t SPI_ReadByte(void)
+{	// Initiate transfer
 	uint8_t retval = SPI->DATA;
 	// Wait until the byte is completely shifted in
 	while (!(SPI->STATUS & SPI_IF_bm));
-	// Send CS high
-	CSPort->OUTSET = CS;
 	// Return the value
 	return retval;
 }
@@ -39,14 +35,10 @@ void SPI_ReadBytes(uint8_t *buffer, uint8_t length)
 }
 
 void SPI_WriteByte(uint8_t data)
-{	// Send CS low
-	CSPort->OUTCLR = CS;
-	// Initiate transfer
+{	// Initiate transfer
 	SPI->DATA = data;
 	// Wait until the byte is completely shifted out
 	while (!(SPI->STATUS & SPI_IF_bm));
-	// Send CS high
-	CSPort->OUTSET = CS;
 }
 
 void SPI_WriteBytes(uint8_t *buffer, uint8_t length)
@@ -55,4 +47,14 @@ void SPI_WriteBytes(uint8_t *buffer, uint8_t length)
 	{
 		SPI_WriteByte(buffer[i]);
 	}
+}
+
+void SPI_Begin(void)
+{	// Send CS low
+	CSPort->OUTCLR = CS;
+}
+
+void SPI_End(void)
+{	// Send CS high
+	CSPort->OUTSET = CS;
 }
